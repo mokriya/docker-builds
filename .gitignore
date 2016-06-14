@@ -1,0 +1,4 @@
+Dockerfile
+*.deb
+*.egg-info
+__pycache__

@@ -1,0 +1,17 @@
+#!/bin/bash
+VERSION=$1
+cd /tmp
+wget -q https://www.python.org/ftp/python/$VERSION/Python-$VERSION.tar.xz
+tar xf Python-$VERSION.tar.xz
+cd /tmp/Python-$VERSION
+./configure
+make
+echo "Interactive, high-level language" > description-pak
+checkinstall -D \
+    --pkgversion=$VERSION \
+    --pkgname=md-cpython \
+    --maintainer="aryeh@mokriya.com" \
+    --fstrans=no \
+    --nodoc \
+    --pakdir=/build \
+    make install
