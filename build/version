@@ -1,0 +1,7 @@
+DEBVERSION=${1:-jessie}
+PYVERSION=${2:-3.5.1}
+RELEASE=${3:-1}
+PKGNAME=md-cpython
+ARCH=$(dpkg --print-architecture)
+PYTHONDEB=${PKGNAME}_${PYVERSION}-${RELEASE}_${ARCH}.deb
+TAG=${DEBVERSION:0:1}${PYVERSION//./}

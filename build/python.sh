@@ -1,19 +1,11 @@
 #!/bin/bash
-DEBVERSION=${1:-jessie}
-PYVERSION=${2:-3.5.1}
-TAG=${DEBVERSION:0:1}${PYVERSION//./}
+. build/version
+ls packages/$PYTHONDEB || exit 1
 TEMPDIR=$(mktemp -d -p packages/)
-if docker run \
-        -v $PWD/$TEMPDIR:/build \
-        --tmpfs /tmp:rw,exec,size=1g \
-        --name pythonbuild \
-        altaurog/pybuild:$DEBVERSION $PYVERSION
-then
-    PYTHONDEB=$(basename $TEMPDIR/md-cpython_${PYVERSION}*.deb)
-    M4="m4 -P -D debversion=$DEBVERSION -D pythondeb=$PYTHONDEB"
-    $M4 python/Dockerfile.m4 > $TEMPDIR/Dockerfile
-    docker build -t altaurog/python:$TAG $TEMPDIR
-fi
-docker run -v $PWD:/m --name m debian mv /m/$TEMPDIR/*.deb /m/packages
-docker rm pythonbuild m
+CONTAINER=$(</dev/urandom tr -dc 'a-zA-Z0-9' | fold -w 10 | head -n 1)
+docker run -v $PWD:/m --name $CONTAINER debian ln /m/packages/$PYTHONDEB /m/$TEMPDIR/
+M4="m4 -P -D debversion=$DEBVERSION -D pythondeb=$PYTHONDEB"
+$M4 python/Dockerfile.m4 > $TEMPDIR/Dockerfile
+docker build -t altaurog/python:$TAG $TEMPDIR
+docker rm $CONTAINER
 rm -rf $TEMPDIR
