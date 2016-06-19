@@ -8,8 +8,6 @@ if docker run \
         --name $BUILDCONTAINER \
         altaurog/pybuild:$DEBVERSION $PKGNAME $PYVERSION $RELEASE
 then
-    MVCONTAINER=$(</dev/urandom tr -dc 'a-zA-Z0-9' | fold -w 10 | head -n 1)
-    docker run -v $PWD:/m --name $MVCONTAINER debian mv /m/$TEMPDIR/$PYTHONDEB /m/packages
+    docker run --rm -v $PWD:/m debian mv /m/$TEMPDIR/$PYTHONDEB /m/packages
 fi
-docker rm $CONTAINER $MVCONTAINER
 rm -rf $TEMPDIR
