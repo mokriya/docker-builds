@@ -37,10 +37,12 @@ if docker run \
         pip install /build
 then
     docker commit \
-        -a "Aryeh Leib Taurog <python@aryehleib.com>" \
+        -a 'Aryeh Leib Taurog <python@aryehleib.com>' \
+        --change 'ENTRYPOINT ["dinfo"]' \
         $CONTAINER altaurog/dockerinfo:$INFOVERSION
     docker commit \
-        -a "Aryeh Leib Taurog <python@aryehleib.com>" \
+        -a 'Aryeh Leib Taurog <python@aryehleib.com>' \
+        --change 'ENTRYPOINT ["dinfo"]' \
         $CONTAINER altaurog/dockerinfo:latest
     docker rm $CONTAINER
 fi
