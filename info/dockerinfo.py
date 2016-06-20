@@ -2,15 +2,6 @@ import subprocess
 import bottle
 
 
-@bottle.route('/')
-def index():
-    bottle.response.content_type = 'text/plain'
-    return '\n'.join(
-        [uname()] +
-        list(ipaddresses())
-    )
-
-
 def uname():
     return run(['uname', '-a'])
 
@@ -29,6 +20,18 @@ def run(command):
             universal_newlines=True)
     p.check_returncode()
     return p.stdout
+
+
+myresponse = '\n'.join(
+        [uname()] +
+        list(ipaddresses())
+    )
+
+
+@bottle.route('/')
+def index():
+    bottle.response.content_type = 'text/plain'
+    return myresponse
 
 
 def infoserver():
