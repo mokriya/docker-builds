@@ -22,10 +22,7 @@ def run(command):
     return p.stdout
 
 
-myresponse = '\n'.join(
-        [uname()] +
-        list(ipaddresses())
-    )
+myresponse = uname().split()[1] + '\n'
 
 
 @bottle.route('/')
