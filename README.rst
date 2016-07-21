@@ -14,10 +14,12 @@ and pretty ugly.
   twice in this case).  This makes sense when you want to add files
   directly to the image.  It doesn't make much sense for package
   installation where you want a \*.deb or \*.whl available only for the
-  build.  It probably doesn't take much time, but it just bugs me, so some
-  of the build process is handled by doing `docker run` with a volume mount
-  and then `docker commit`.  (I admit this is probably a bad optimization,
-  because it complicates the build process.)
+  build.  Apparently adding these files to the build actually increases the
+  container size, because ADD creates a new layer, and although removing
+  the file in a later step hides the file, it is still in the earlier
+  layer.  So some of the build process is handled by doing `docker run`
+  with a volume mount and then `docker commit`.  (This might be a bad
+  optimization, because it complicates the build process.)
 
 * Docker allows some parameterization of the build using build-time
   variables, but for whatever reason, it doesn't allow variables in the
