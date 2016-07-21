@@ -1,14 +1,24 @@
 #!/bin/bash
-PKGNAME=$1
-VERSION=$2
-RELEASE=${3:-1}
+USERGROUP=$1
+PKGNAME=$2
+VERSION=$3
+RELEASE=${4:-1}
+sudo() {
+    # yah, twisted.  sudo runs NOT as root!
+    su nobody -s /bin/bash -c "$*"
+}
+echo building python $VERSION
 cd /tmp
-wget -q https://www.python.org/ftp/python/$VERSION/Python-$VERSION.tar.xz
-tar xf Python-$VERSION.tar.xz
+
+# run the build as nobody
+sudo wget -q https://www.python.org/ftp/python/$VERSION/Python-$VERSION.tar.xz
+sudo tar xf Python-$VERSION.tar.xz
 cd /tmp/Python-$VERSION
-./configure
-make
+sudo ./configure
+sudo make
 echo "Interactive, high-level language" > description-pak
+
+# This has to be run as root
 checkinstall -D \
     --pkgname=$PKGNAME \
     --pkgversion=$VERSION \
@@ -18,3 +28,5 @@ checkinstall -D \
     --nodoc \
     --pakdir=/build \
     make install
+
+chown $USERGROUP /build/${PKGNAME}_${VERSION}-${RELEASE}_*.deb
