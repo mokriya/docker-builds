@@ -37,9 +37,13 @@ and pretty ugly.
 
 Ultimately, we may have compelling reason to just use straight Dockerfiles.
 Or switch to an alternative build system (maybe HashiCorp's Packer_).  Or
-create our own.
+create our own.  Docker has a lot of momentum, and currently has the most
+support (ECS), but it may not be the right match long-term.  We may at some
+point reevaluate other container technologies like rkt_ and nix_.
 
 .. _Packer: https://www.packer.io/
+.. _rkt: https://coreos.com/rkt/docs/latest/
+.. _nix: http://nixos.org/
 
 Images
 """""""
