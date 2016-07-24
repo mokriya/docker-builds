@@ -18,8 +18,9 @@ and pretty ugly.
   container size, because ADD creates a new layer, and although removing
   the file in a later step hides the file, it is still in the earlier
   layer.  So some of the build process is handled by doing `docker run`
-  with a volume mount and then `docker commit`.  (This might be a bad
-  optimization, because it complicates the build process.)
+  with a volume mount and then `docker commit`.  This might be a bad
+  optimization, because it complicates the build process.  It also does not
+  do caching like `docker build`, so these steps will always be executed.
 
 * Docker allows some parameterization of the build using build-time
   variables, but for whatever reason, it doesn't allow variables in the
